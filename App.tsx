@@ -42,7 +42,7 @@ export default function App() {
     return (
       <div className="min-h-[100dvh] bg-apple-bg flex flex-col safe-pb">
         {/* Header - Apple Wallet Style */}
-        <div className="bg-apple-bg/85 backdrop-blur-xl sticky top-0 z-40 pt-[env(safe-area-inset-top)] border-b border-gray-200/50">
+        <div className="bg-apple-bg/85 backdrop-blur-xl sticky top-0 z-40 safe-pt border-b border-gray-200/50">
           <div className="px-5 pt-4 pb-3 flex justify-between items-end max-w-3xl mx-auto w-full">
             <h1 className="text-[34px] font-bold tracking-tight text-gray-900 leading-none">錢包</h1>
             <button

@@ -66,7 +66,7 @@ export const CreditCardVisual: React.FC<Props> = ({ card, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className={`relative w-full max-w-lg mx-auto aspect-[1.4/1] sm:aspect-[1.586/1] rounded-[20px] p-4 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-300 border border-white/10 ${card.backgroundImage ? 'bg-gray-900' : `bg-gradient-to-br ${gradient}`}`}
+      className={`relative w-full max-w-lg mx-auto min-h-[220px] sm:min-h-[240px] h-auto rounded-[20px] p-5 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-300 border border-white/10 ${card.backgroundImage ? 'bg-gray-900' : `bg-gradient-to-br ${gradient}`}`}
     >
       {/* 處理自訂圖片背景 */}
       {card.backgroundImage && (
@@ -91,23 +91,23 @@ export const CreditCardVisual: React.FC<Props> = ({ card, onClick }) => {
         </>
       )}
 
-      <div className="flex flex-col h-full justify-between relative z-10 text-white">
+      <div className="flex flex-col h-full justify-between relative z-10 text-white min-h-full">
 
         {/* 頂部：銀行名稱與本期累積金額 */}
         <div className="flex justify-between items-start">
-          <p className="text-base sm:text-xl font-medium tracking-wider text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate max-w-[60%]">{card.bankName}</p>
+          <p className="text-base sm:text-xl font-medium tracking-wider text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate max-w-[60%] pl-1">{card.bankName}</p>
 
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] sm:text-[10px] tracking-widest text-white/70 mb-0.5 uppercase drop-shadow-md">本期累積</span>
-            <span className="font-mono text-base sm:text-lg font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-white/95">
+          <div className="flex flex-col items-end pr-1">
+            <span className="text-[10px] sm:text-[11px] font-medium tracking-widest text-white/80 mb-0.5 uppercase drop-shadow-md">本期累積</span>
+            <span className="font-mono text-lg sm:text-xl font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-white/95">
               ${currentTotal.toLocaleString()}
             </span>
           </div>
         </div>
 
-        {/* 中間：晶片與卡片名稱 - 使用 flex-1 來動態調整垂直間距 */}
-        <div className="flex flex-col flex-1 justify-center py-1 sm:py-2">
-          <div className="w-10 h-7 sm:w-11 sm:h-8 bg-gradient-to-br from-yellow-200 via-yellow-400 to-yellow-600 rounded-[4px] border border-yellow-700/50 flex items-center justify-center mb-1.5 sm:mb-3 shadow-md relative overflow-hidden opacity-90">
+        {/* 中間：晶片與卡片名稱 - Content Driven Height 中間自動長高推開上下 */}
+        <div className="flex flex-col flex-1 justify-center py-4 sm:py-6 pl-1">
+          <div className="w-10 h-7 sm:w-12 sm:h-8 bg-gradient-to-br from-yellow-200 via-yellow-400 to-yellow-600 rounded-[4px] border border-yellow-700/50 flex items-center justify-center mb-2 sm:mb-3 shadow-md relative overflow-hidden opacity-90">
             <div className="absolute inset-0 border-[0.5px] border-black/20 rounded-[4px]"></div>
             <div className="w-full h-[0.5px] bg-black/20 absolute top-1/2"></div>
             <div className="w-[0.5px] h-full bg-black/20 absolute left-1/3"></div>
@@ -121,19 +121,19 @@ export const CreditCardVisual: React.FC<Props> = ({ card, onClick }) => {
         </div>
 
         {/* 底部：日期資訊與品牌 Logo */}
-        <div className="flex justify-between items-end mb-0 sm:mb-1">
-          <div className="flex gap-4 sm:gap-8">
+        <div className="flex justify-between items-end pl-1 pt-1">
+          <div className="flex gap-6 sm:gap-10">
             <div className="flex flex-col">
-              <span className="text-[8px] sm:text-[10px] uppercase tracking-widest text-white/70 mb-0 drop-shadow-md">結帳日</span>
-              <span className="font-mono text-lg sm:text-2xl font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{card.statementDate} <span className="text-xs font-sans font-normal text-white/80">日</span></span>
+              <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-widest text-white/80 mb-1 drop-shadow-md">結帳日</span>
+              <span className="font-mono text-xl sm:text-3xl font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{card.statementDate} <span className="text-sm font-sans font-normal text-white/80">日</span></span>
             </div>
             <div className="flex flex-col">
-              <span className="text-[8px] sm:text-[10px] uppercase tracking-widest text-white/70 mb-0 drop-shadow-md">繳款日</span>
-              <span className="font-mono text-lg sm:text-2xl font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{card.dueDate} <span className="text-xs font-sans font-normal text-white/80">日</span></span>
+              <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-widest text-white/80 mb-1 drop-shadow-md">繳款日</span>
+              <span className="font-mono text-xl sm:text-3xl font-bold leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{card.dueDate} <span className="text-sm font-sans font-normal text-white/80">日</span></span>
             </div>
           </div>
 
-          <div className="flex flex-col items-end pb-0 shrink-0 pl-2">
+          <div className="flex flex-col items-end shrink-0 pr-1">
             <NetworkLogo network={card.network} />
           </div>
         </div>

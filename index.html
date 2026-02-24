@@ -70,12 +70,28 @@
       position: relative;
     }
 
-    .safe-pb {
-      padding-bottom: env(safe-area-inset-bottom);
+    /* 防止瀏海遮蔽元素，依照 iOS 安全邊設定 */
+    @supports (-webkit-touch-callout: none) {
+      .safe-pb {
+        padding-bottom: constant(safe-area-inset-bottom);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      .safe-pt {
+        padding-top: constant(safe-area-inset-top);
+        padding-top: env(safe-area-inset-top);
+      }
     }
 
-    .safe-pt {
-      padding-top: env(safe-area-inset-top);
+    /* 確保非 iOS 裝置的安全區域也有基本的 env 支援 */
+    @supports not (-webkit-touch-callout: none) {
+      .safe-pb {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      .safe-pt {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
     }
   </style>
 </head>
