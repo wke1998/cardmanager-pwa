@@ -65,8 +65,8 @@ export const CardDetail: React.FC<Props> = ({ card, onBack, onEdit, onDelete, on
   const titleClass = "text-[16px] font-bold text-gray-900 ml-2";
 
   return (
-    <div className="min-h-screen bg-apple-bg flex flex-col">
-      <div className="bg-apple-bg/80 backdrop-blur-xl sticky top-0 z-50 safe-pt border-b border-gray-200/50">
+    <div className="min-h-[100dvh] bg-apple-bg flex flex-col">
+      <div className="bg-apple-bg/80 backdrop-blur-xl sticky top-0 z-50 pt-[env(safe-area-inset-top)] border-b border-gray-200/50">
         <div className="flex items-center justify-between px-4 h-14 max-w-3xl mx-auto w-full">
           <button onClick={onBack} className="text-apple-blue flex items-center p-2 -ml-2 active:opacity-50 transition-opacity">
             <ArrowLeft size={24} />

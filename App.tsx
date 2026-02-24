@@ -26,7 +26,7 @@ export default function App() {
   };
 
   const handleUpdateCard = (cardId: string, updatedData: Partial<CreditCard>) => {
-    setCards(cards.map(card => 
+    setCards(cards.map(card =>
       card.id === cardId ? { ...card, ...updatedData } : card
     ));
     // 保持在原畫面
@@ -40,12 +40,12 @@ export default function App() {
   // Render List View
   if (view.type === 'LIST') {
     return (
-      <div className="min-h-screen bg-apple-bg flex flex-col safe-pb">
+      <div className="min-h-[100dvh] bg-apple-bg flex flex-col safe-pb">
         {/* Header - Apple Wallet Style */}
-        <div className="bg-apple-bg/85 backdrop-blur-xl sticky top-0 z-40 safe-pt border-b border-gray-200/50">
+        <div className="bg-apple-bg/85 backdrop-blur-xl sticky top-0 z-40 pt-[env(safe-area-inset-top)] border-b border-gray-200/50">
           <div className="px-5 pt-4 pb-3 flex justify-between items-end max-w-3xl mx-auto w-full">
             <h1 className="text-[34px] font-bold tracking-tight text-gray-900 leading-none">錢包</h1>
-            <button 
+            <button
               onClick={() => setView({ type: 'ADD' })}
               className="bg-apple-blue text-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm mb-0.5 active:opacity-70 transition-opacity"
             >
@@ -63,7 +63,7 @@ export default function App() {
               </div>
               <h2 className="text-[22px] font-semibold text-gray-800 mb-2">錢包是空的</h2>
               <p className="text-gray-500 mb-8 text-[15px] max-w-[250px]">點擊右上角的按鈕加入卡片，開始管理您的信用卡。</p>
-              <button 
+              <button
                 onClick={() => setView({ type: 'ADD' })}
                 className="bg-apple-blue text-white font-semibold py-3.5 px-10 rounded-[14px] active:scale-95 transition-all shadow-md text-[17px]"
               >
@@ -86,10 +86,10 @@ export default function App() {
                         {daysLeft === 0 ? '今日繳款！' : `剩 ${daysLeft} 天繳款`}
                       </div>
                     )}
-                    
-                    <CreditCardVisual 
-                      card={card} 
-                      onClick={() => setView({ type: 'DETAIL', cardId: card.id })} 
+
+                    <CreditCardVisual
+                      card={card}
+                      onClick={() => setView({ type: 'DETAIL', cardId: card.id })}
                     />
                   </div>
                 );
@@ -104,9 +104,9 @@ export default function App() {
   // Render Add Form
   if (view.type === 'ADD') {
     return (
-      <CardForm 
-        onSave={handleAddCard} 
-        onCancel={() => setView({ type: 'LIST' })} 
+      <CardForm
+        onSave={handleAddCard}
+        onCancel={() => setView({ type: 'LIST' })}
       />
     );
   }
@@ -119,13 +119,13 @@ export default function App() {
       return null;
     }
     return (
-      <CardForm 
+      <CardForm
         initialData={cardToEdit}
         onSave={(data) => {
           handleUpdateCard(view.cardId, data);
           setView({ type: 'DETAIL', cardId: view.cardId });
-        }} 
-        onCancel={() => setView({ type: 'DETAIL', cardId: view.cardId })} 
+        }}
+        onCancel={() => setView({ type: 'DETAIL', cardId: view.cardId })}
       />
     );
   }
@@ -138,7 +138,7 @@ export default function App() {
       return null;
     }
     return (
-      <CardDetail 
+      <CardDetail
         card={cardToShow}
         onBack={() => setView({ type: 'LIST' })}
         onEdit={() => setView({ type: 'EDIT', cardId: view.cardId })}
