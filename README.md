@@ -2,7 +2,7 @@
 
 ## 如何在 iphone 上使用
 
-1.開啟 Safari：在 iPhone 上打開 Safari 瀏覽器，輸入https://mycardmanage.netlify.app/。
+1.開啟 Safari：在 iPhone 上打開 Safari 瀏覽器，輸入https://mycardmanage.netlify.app/
 
 2.點擊「分享」按鈕：位於螢幕底部中央的方框箭頭圖示。
 
