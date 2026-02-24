@@ -90,10 +90,17 @@ export const CardDetail: React.FC<Props> = ({ card, onBack, onEdit, onDelete, on
               <Receipt size={20} className="text-apple-blue" />
               <h3 className={titleClass}>本期累積消費</h3>
             </div>
-            <span className="font-mono text-xl font-bold text-gray-900">
+            <span className="font-mono text-2xl font-bold text-gray-900">
               ${currentTotal.toLocaleString()}
             </span>
           </div>
+
+          {card.creditLimit && (
+            <div className="flex justify-between items-center text-[13px] text-gray-500 bg-gray-50 rounded-lg px-3 py-2 -mt-1 pb-2">
+              <span>總額度 ${card.creditLimit.toLocaleString()}</span>
+              <span>可用額度約 ${(card.creditLimit - currentTotal).toLocaleString()}</span>
+            </div>
+          )}
 
           <div className="flex flex-col gap-3 pt-2">
             <div className="flex gap-3">

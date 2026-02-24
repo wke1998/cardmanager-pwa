@@ -206,6 +206,7 @@ export const CardForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => 
     expiryDate: '',
     statementDate: '1',
     dueDate: '15',
+    creditLimit: '',
     rewardsInfo: '',
     rewardCap: '',
     applicableChannels: '',
@@ -223,6 +224,7 @@ export const CardForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => 
         expiryDate: initialData.expiryDate,
         statementDate: initialData.statementDate.toString(),
         dueDate: initialData.dueDate.toString(),
+        creditLimit: initialData.creditLimit ? initialData.creditLimit.toString() : '',
         rewardsInfo: initialData.rewardsInfo,
         rewardCap: initialData.rewardCap,
         applicableChannels: initialData.applicableChannels || '',
@@ -280,10 +282,14 @@ export const CardForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const { creditLimit, ...restFormData } = formData;
+    const parsedLimit = parseInt(creditLimit.replace(/,/g, ''), 10);
+
     onSave({
-      ...formData,
+      ...restFormData,
       statementDate: parseInt(formData.statementDate, 10),
       dueDate: parseInt(formData.dueDate, 10),
+      ...(isNaN(parsedLimit) ? {} : { creditLimit: parsedLimit }),
       subscriptions,
     });
   };
@@ -441,6 +447,18 @@ export const CardForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => 
                   className={inputClass}
                 />
               </div>
+            </div>
+            <div>
+              <label className={labelClass}>總額度 <span className="text-gray-400 font-normal">(選填)</span></label>
+              <input
+                type="number"
+                inputMode="decimal"
+                name="creditLimit"
+                value={formData.creditLimit}
+                onChange={handleChange}
+                placeholder="如: 100000"
+                className={inputClass}
+              />
             </div>
           </div>
         </div>

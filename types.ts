@@ -30,6 +30,7 @@ export interface CreditCard {
   expiryDate: string; // MM/YY format
   statementDate: number; // 1-31
   dueDate: number; // 1-31
+  creditLimit?: number; // 信用額度
   rewardsInfo: string;
   rewardCap: string;
   applicableChannels?: string;
