@@ -1,0 +1,5 @@
+{
+  "name": "CardManager PWA",
+  "description": "A secure, local-storage based Progressive Web App for managing credit card billing cycles, rewards, and annual fee conditions on iOS.",
+  "requestFramePermissions": []
+}

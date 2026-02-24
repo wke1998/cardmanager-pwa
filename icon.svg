@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- iOS 風格的圓角矩形背景 -->
+  <rect width="512" height="512" rx="115" fill="#007aff"/>
+  <!-- 信用卡圖案 -->
+  <path d="M128 176h256a48 48 0 0 1 48 48v128a48 48 0 0 1-48 48H128a48 48 0 0 1-48-48V224a48 48 0 0 1 48-48zm0 32v16h256v-16H128zm0 80v16h64v-16h-64z" fill="#ffffff"/>
+</svg>
