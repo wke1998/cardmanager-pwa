@@ -1,4 +1,4 @@
-const CACHE_NAME = 'card-manager-cache-v3';
+const CACHE_NAME = 'card-manager-cache-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
