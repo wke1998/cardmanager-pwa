@@ -66,7 +66,7 @@ export const CreditCardVisual: React.FC<Props> = ({ card, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className={`relative w-full max-w-lg mx-auto min-h-[220px] sm:min-h-[240px] h-auto rounded-[20px] p-5 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-300 border border-white/10 ${card.backgroundImage ? 'bg-gray-900' : `bg-gradient-to-br ${gradient}`}`}
+      className={`relative w-full max-w-lg mx-auto min-h-[220px] sm:min-h-[240px] h-auto rounded-[20px] p-5 sm:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-300  ${card.backgroundImage ? 'bg-gray-900' : `bg-gradient-to-br ${gradient}`}`}
     >
       {/* 處理自訂圖片背景 */}
       {card.backgroundImage && (
@@ -76,9 +76,8 @@ export const CreditCardVisual: React.FC<Props> = ({ card, onClick }) => {
             alt="Card Background"
             className="absolute inset-0 w-full h-full object-cover z-0"
           />
-          {/* 強力陰影遮罩，確保不論圖片多白，文字都看得清楚 */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/40 to-black/70 mix-blend-multiply"></div>
-          <div className="absolute inset-0 z-0 bg-black/20"></div>
+          {/* 底部漸層遮罩，確保底部文字可讀，上方保留照片原色 */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
         </>
       )}
 
