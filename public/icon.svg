@@ -1,6 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- iOS 風格的圓角矩形背景 -->
-  <rect width="512" height="512" rx="115" fill="#007aff"/>
-  <!-- 信用卡圖案 -->
-  <path d="M128 176h256a48 48 0 0 1 48 48v128a48 48 0 0 1-48 48H128a48 48 0 0 1-48-48V224a48 48 0 0 1 48-48zm0 32v16h256v-16H128zm0 80v16h64v-16h-64z" fill="#ffffff"/>
+  <!-- iOS 風格圓角矩形背景 -->
+  <rect width="512" height="512" rx="115" fill="#f2f2f7"/>
+
+  <!-- 後方深灰色卡片（傾斜） -->
+  <g transform="translate(256, 210) rotate(-15) translate(-120, -75)">
+    <rect width="240" height="150" rx="16" fill="#555555"/>
+    <!-- 磁條 -->
+    <rect y="28" width="240" height="30" fill="#3d3d3d"/>
+    <!-- 磁條亮帶 -->
+    <rect x="160" y="28" width="40" height="30" fill="#999999" opacity="0.5"/>
+    <rect x="200" y="28" width="20" height="30" fill="#cccccc" opacity="0.4"/>
+  </g>
+
+  <!-- 前方珊瑚色主卡片 -->
+  <g transform="translate(110, 195)">
+    <rect width="290" height="180" rx="18" fill="#f07060"/>
+
+    <!-- 卡片亮帶（磁條風格） -->
+    <rect y="48" width="290" height="28" fill="#f5a090" opacity="0.6"/>
+
+    <!-- 卡號線條 -->
+    <rect x="36" y="120" width="100" height="14" rx="7" fill="#e8a040"/>
+
+    <!-- 晶片 -->
+    <rect x="216" y="110" width="36" height="28" rx="5" fill="#f0c040"/>
+  </g>
 </svg>

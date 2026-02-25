@@ -20,6 +20,16 @@ export function getCurrentCycleStartDate(statementDate: number): Date {
 }
 
 /**
+ * 取得「上期帳單」的起始與結束時間
+ */
+export function getPreviousCycleStartDate(statementDate: number): Date {
+  const currentStart = getCurrentCycleStartDate(statementDate);
+  const prevStart = new Date(currentStart);
+  prevStart.setMonth(prevStart.getMonth() - 1);
+  return prevStart;
+}
+
+/**
  * 取得下一次的繳款截止日
  */
 export function getNextDueDate(dueDate: number): Date {

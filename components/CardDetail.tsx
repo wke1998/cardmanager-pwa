@@ -88,7 +88,7 @@ export const CardDetail: React.FC<Props> = ({ card, onBack, onEdit, onDelete, on
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Receipt size={20} className="text-apple-blue" />
-              <h3 className={titleClass}>本期累積消費</h3>
+              <h3 className={titleClass}>當前消費累積</h3>
             </div>
             <span className="font-mono text-2xl font-bold text-gray-900">
               ${currentTotal.toLocaleString()}
