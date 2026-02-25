@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { CreditCard, ViewState } from './types';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { CreditCardVisual } from './components/CreditCardVisual';
 import { CardForm } from './components/CardForm';
 import { CardDetail } from './components/CardDetail';
-import { Plus, Wallet } from 'lucide-react';
-import { getNextDueDate } from './utils';
+import { Plus, Wallet, Download, Upload } from 'lucide-react';
+import { getNextDueDate, exportCardsToJSON, parseBackupJSON } from './utils';
 
 // Generates a simple UUID-like string
 const generateId = () => Math.random().toString(36).substring(2, 9);
@@ -13,6 +13,61 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 export default function App() {
   const [cards, setCards] = useLocalStorage<CreditCard[]>('pwa-cards-data', []);
   const [view, setView] = useState<ViewState>({ type: 'LIST' });
+
+  // 隱藏的 file input ref，用於觸發匯入選檔視窗
+  const importInputRef = useRef<HTMLInputElement>(null);
+
+  /** 匯出所有卡片為 JSON 備份檔 */
+  const handleExport = () => {
+    if (cards.length === 0) {
+      alert('目前沒有任何卡片可以匯出。');
+      return;
+    }
+    exportCardsToJSON(cards);
+  };
+
+  /** 使用者選擇 JSON 備份檔後執行匯入 */
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const backup = parseBackupJSON(ev.target?.result as string);
+        const cardCount = backup.cards.length;
+
+        // 讓使用者選擇「合併」或「覆蓋」
+        const isMerge = window.confirm(
+          `備份中包含 ${cardCount} 張卡片。\n\n` +
+          `【確定】→ 合併匯入（保留現有卡片，略過 id 重複的項目）\n` +
+          `【取消】→ 完全覆蓋（清除現有資料，以備份取代）`
+        );
+
+        if (isMerge) {
+          // 合併模式：只加入 id 不存在的卡片
+          const existingIds = new Set(cards.map(c => c.id));
+          const newCards = backup.cards.filter(c => !existingIds.has(c.id));
+          setCards([...cards, ...newCards]);
+          alert(`✅ 合併完成！新增了 ${newCards.length} 張卡片。`);
+        } else {
+          // 覆蓋模式：二次確認，避免誤操作
+          const confirmed = window.confirm(
+            `⚠️ 警告：此操作將清除現有 ${cards.length} 張卡片並以備份取代，確定繼續嗎？`
+          );
+          if (confirmed) {
+            setCards(backup.cards);
+            alert(`✅ 覆蓋完成！已還原 ${cardCount} 張卡片。`);
+          }
+        }
+      } catch (err) {
+        alert('❌ 匯入失敗：' + (err as Error).message);
+      }
+      // 重置 input，允許下次選同一檔案也能觸發
+      e.target.value = '';
+    };
+    reader.readAsText(file, 'utf-8');
+  };
 
   const handleAddCard = (newCardData: Omit<CreditCard, 'id' | 'createdAt'>) => {
     const newCard: CreditCard = {
@@ -45,12 +100,40 @@ export default function App() {
         <div className="bg-apple-bg/85 backdrop-blur-xl sticky top-0 z-40 safe-pt border-b border-gray-200/50">
           <div className="px-5 pt-4 pb-3 flex justify-between items-end max-w-3xl mx-auto w-full">
             <h1 className="text-[34px] font-bold tracking-tight text-gray-900 leading-none">錢包</h1>
-            <button
-              onClick={() => setView({ type: 'ADD' })}
-              className="bg-apple-blue text-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm mb-0.5 active:opacity-70 transition-opacity"
-            >
-              <Plus size={20} strokeWidth={2.5} />
-            </button>
+            {/* 右側操作按鈕群組 */}
+            <div className="flex items-center gap-2 mb-0.5">
+              {/* 匯出備份按鈕 */}
+              <button
+                onClick={handleExport}
+                title="匯出備份"
+                className="text-apple-blue w-8 h-8 rounded-full flex items-center justify-center active:opacity-70 transition-opacity"
+              >
+                <Download size={20} strokeWidth={2} />
+              </button>
+              {/* 匯入備份按鈕（觸發隱藏 file input） */}
+              <button
+                onClick={() => importInputRef.current?.click()}
+                title="匯入備份"
+                className="text-apple-blue w-8 h-8 rounded-full flex items-center justify-center active:opacity-70 transition-opacity"
+              >
+                <Upload size={20} strokeWidth={2} />
+              </button>
+              {/* 新增卡片按鈕 */}
+              <button
+                onClick={() => setView({ type: 'ADD' })}
+                className="bg-apple-blue text-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm active:opacity-70 transition-opacity"
+              >
+                <Plus size={20} strokeWidth={2.5} />
+              </button>
+            </div>
+            {/* 隱藏的檔案選擇器，accept 限制為 JSON */}
+            <input
+              ref={importInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="hidden"
+              onChange={handleImportFile}
+            />
           </div>
         </div>
 

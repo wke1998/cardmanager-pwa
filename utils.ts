@@ -1,3 +1,5 @@
+import { CreditCard } from './types';
+
 /**
  * 根據信用卡的結帳日，計算「本期帳單」的起始日期。
  * 例如：結帳日為 5 日。
@@ -13,7 +15,7 @@ export function getCurrentCycleStartDate(statementDate: number): Date {
   if (currentDay <= statementDate) {
     month -= 1;
   }
-  
+
   return new Date(year, month, statementDate + 1, 0, 0, 0, 0);
 }
 
@@ -24,7 +26,7 @@ export function getNextDueDate(dueDate: number): Date {
   const now = new Date();
   let year = now.getFullYear();
   let month = now.getMonth();
-  
+
   // 如果今天已經過了這個月的繳款日，就顯示下個月的繳款日
   if (now.getDate() > dueDate) {
     month += 1;
@@ -37,7 +39,7 @@ export function getNextDueDate(dueDate: number): Date {
  */
 export function downloadICS(cardName: string, dueDate: number) {
   const nextDue = getNextDueDate(dueDate);
-  
+
   const year = nextDue.getFullYear();
   const month = String(nextDue.getMonth() + 1).padStart(2, '0');
   const day = String(nextDue.getDate()).padStart(2, '0');
@@ -68,4 +70,59 @@ export function downloadICS(cardName: string, dueDate: number) {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+// ─── 備份 / 還原 ────────────────────────────────────────────────────────────
+
+/** 備份 JSON 的外層包裝格式 */
+export interface BackupData {
+  version: string;     // 備份版本號，供未來相容性判斷
+  exportedAt: number;  // 匯出時間戳（Unix ms）
+  cards: CreditCard[]; // 完整卡片資料（含交易紀錄與訂閱）
+}
+
+/**
+ * 將卡片陣列匯出為 JSON 備份檔，並觸發瀏覽器下載
+ */
+export function exportCardsToJSON(cards: CreditCard[]): void {
+  const backup: BackupData = {
+    version: '1.0',
+    exportedAt: Date.now(),
+    cards,
+  };
+  const json = JSON.stringify(backup, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const link = document.createElement('a');
+  const d = new Date();
+  const dateStr =
+    `${d.getFullYear()}` +
+    `${String(d.getMonth() + 1).padStart(2, '0')}` +
+    `${String(d.getDate()).padStart(2, '0')}`;
+  link.href = URL.createObjectURL(blob);
+  link.setAttribute('download', `cardmanager_backup_${dateStr}.json`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
+/**
+ * 解析並驗證備份 JSON 字串
+ * @throws Error 若格式不正確或非 JSON
+ */
+export function parseBackupJSON(jsonText: string): BackupData {
+  let data: unknown;
+  try {
+    data = JSON.parse(jsonText);
+  } catch {
+    throw new Error('檔案內容不是有效的 JSON 格式');
+  }
+  if (
+    typeof data !== 'object' ||
+    data === null ||
+    !Array.isArray((data as BackupData).cards)
+  ) {
+    throw new Error('無效的備份格式：缺少 cards 陣列');
+  }
+  return data as BackupData;
 }
