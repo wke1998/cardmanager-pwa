@@ -197,6 +197,13 @@ export const CardDetail: React.FC<Props> = ({ card, onBack, onEdit, onDelete, on
               <p className="text-[13px] text-gray-500 mb-1">繳款截止日</p>
               <p className="text-2xl font-bold text-rose-500">{card.dueDate} <span className="text-sm font-normal text-rose-400">日</span></p>
             </div>
+            {/* 有填有效期限才顯示 */}
+            {card.expiryDate && (
+              <div className="flex-1 pl-4">
+                <p className="text-[13px] text-gray-500 mb-1">有效期限</p>
+                <p className="text-2xl font-bold text-gray-900 font-mono tracking-widest">{card.expiryDate}</p>
+              </div>
+            )}
           </div>
 
           <button
