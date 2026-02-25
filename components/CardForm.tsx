@@ -259,6 +259,16 @@ export const CardForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => 
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // 有效期限自動補斜線格式化 (MM/YY)
+  const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, ''); // 只保留數字
+    if (raw.length > 4) raw = raw.substring(0, 4); // 最多 4 位數字
+    if (raw.length >= 3) {
+      raw = raw.substring(0, 2) + '/' + raw.substring(2);
+    }
+    setFormData(prev => ({ ...prev, expiryDate: raw }));
+  };
+
   // 觸發照片選擇，讀取後開啟裁切器
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -441,9 +451,10 @@ export const CardForm: React.FC<Props> = ({ initialData, onSave, onCancel }) => 
                 <input
                   name="expiryDate"
                   value={formData.expiryDate}
-                  onChange={handleChange}
+                  onChange={handleExpiryDateChange}
                   placeholder="MM/YY"
                   maxLength={5}
+                  inputMode="numeric"
                   className={inputClass}
                 />
               </div>
