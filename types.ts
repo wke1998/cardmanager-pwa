@@ -22,6 +22,11 @@ export interface Subscription {
   amount: number;  // 月費金額
 }
 
+export interface PaymentCheck {
+  month: string;   // 帳單週期 key（如 "2026-02-06"），依結帳日計算，用於判斷是否需要自動重置
+  checked: boolean; // 是否已繳款 / 戶頭已備妥金額
+}
+
 export interface CreditCard {
   id: string;
   name: string;
@@ -40,6 +45,7 @@ export interface CreditCard {
   createdAt: number;
   transactions?: Transaction[]; // 消費紀錄陣列
   subscriptions?: Subscription[]; // 固定訂閱扣款
+  paymentCheck?: PaymentCheck;     // 繳款確認狀態（每月自動重置）
 }
 
 export type ViewState =

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CreditCard, Transaction } from '../types';
 import { CreditCardVisual } from './CreditCardVisual';
 import { getCurrentCycleStartDate, downloadICS } from '../utils';
-import { ArrowLeft, Trash2, Calendar, Gift, AlertCircle, ShieldCheck, Receipt, X, Plus, CalendarPlus, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Trash2, Calendar, Gift, AlertCircle, ShieldCheck, Receipt, X, Plus, CalendarPlus, RefreshCw, CheckCircle2, Circle } from 'lucide-react';
 
 interface Props {
   card: CreditCard;
@@ -49,6 +49,26 @@ export const CardDetail: React.FC<Props> = ({ card, onBack, onEdit, onDelete, on
 
   const handleAddToCalendar = () => {
     downloadICS(card.name, card.dueDate);
+  };
+
+  // ─── 繳款確認 checkbox（依帳單週期自動重置） ───────────────────
+  // 使用帳單週期起始日作為 key，當進入新的帳單週期時自動重置
+  const cycleStart = getCurrentCycleStartDate(card.statementDate);
+  const currentCycleKey = `${cycleStart.getFullYear()}-${String(cycleStart.getMonth() + 1).padStart(2, '0')}-${String(cycleStart.getDate()).padStart(2, '0')}`;
+
+  // 如果儲存的週期 key 與當前不同，代表已進入新的帳單週期，需要重置
+  const isPaymentChecked =
+    card.paymentCheck?.month === currentCycleKey
+      ? card.paymentCheck.checked
+      : false;
+
+  const handleTogglePaymentCheck = () => {
+    onUpdate({
+      paymentCheck: {
+        month: currentCycleKey,
+        checked: !isPaymentChecked,
+      },
+    });
   };
 
   const channelTags = card.applicableChannels
@@ -216,6 +236,43 @@ export const CardDetail: React.FC<Props> = ({ card, onBack, onEdit, onDelete, on
 
           <p className="text-[12px] text-gray-400 text-center">
             本期計算起算日：{startDate.toLocaleDateString('zh-TW')}
+          </p>
+        </div>
+
+        {/* ─── 繳款狀態 ─── */}
+        <div className={blockClass}>
+          <div className="flex items-center mb-2">
+            <CheckCircle2 size={20} className="text-teal-500" />
+            <h3 className={titleClass}>繳款狀態</h3>
+          </div>
+          <button
+            onClick={handleTogglePaymentCheck}
+            className={`w-full flex items-center gap-3.5 p-4 rounded-xl border-2 transition-all duration-200 active:scale-[0.98] ${isPaymentChecked
+              ? 'bg-emerald-50 border-emerald-300 shadow-sm'
+              : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+              }`}
+          >
+            {isPaymentChecked ? (
+              <CheckCircle2 size={28} className="text-emerald-500 shrink-0" strokeWidth={2.5} />
+            ) : (
+              <Circle size={28} className="text-gray-300 shrink-0" strokeWidth={2} />
+            )}
+            <div className="flex-1 text-left">
+              <p className={`text-[16px] font-semibold ${isPaymentChecked ? 'text-emerald-700' : 'text-gray-700'
+                }`}>
+                {isPaymentChecked ? '本月已確認繳款' : '尚未確認繳款'}
+              </p>
+              <p className={`text-[13px] mt-0.5 ${isPaymentChecked ? 'text-emerald-500' : 'text-gray-400'
+                }`}>
+                {isPaymentChecked
+                  ? '已完成繳款或戶頭已備妥足夠金額'
+                  : '點擊確認已完成繳款或戶頭已有足夠金額'}
+              </p>
+            </div>
+          </button>
+          <p className="text-[12px] text-gray-400 text-center mt-2 flex items-center justify-center gap-1">
+            <RefreshCw size={11} />
+            此勾選於每期帳單週期自動重置
           </p>
         </div>
 
